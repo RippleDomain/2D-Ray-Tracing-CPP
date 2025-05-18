@@ -1,36 +1,6 @@
 #include <stdio.h>
 #include <SDL3/SDL.h>
-
-struct Circle
-{
-	float x, y, r;
-};
-
-void fillCircle(SDL_Renderer* renderer, Circle circle)
-{
-	float x = circle.r;
-	float y = 0.0f;
-	float err = 0.0f;
-
-	while (x >= y)
-	{
-		SDL_RenderLine(renderer, circle.x - x, circle.y + y, circle.x + x, circle.y + y);
-		SDL_RenderLine(renderer, circle.x - y, circle.y + x, circle.x + y, circle.y - x);
-		SDL_RenderLine(renderer, circle.x - x, circle.y - y, circle.x + x, circle.y - y);
-		SDL_RenderLine(renderer, circle.x - y, circle.y - x, circle.x + y, circle.y + x);
-
-		if (err <= 0.0f)
-		{
-			y += 1.0f;
-			err += 2.0f * y + 1.0f;
-		}
-		if (err > 0.0f)
-		{
-			x -= 1.0f;
-			err -= 2.0f * x + 1.0f;
-		}
-	}
-}
+#include "Circle.cpp"
 
 int main() 
 {
@@ -43,14 +13,16 @@ int main()
 	SDL_Renderer* renderer = SDL_CreateRenderer(window, nullptr);
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 	SDL_RenderClear(renderer);
-
 	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-	Circle circle = {400, 300, 100};
-	fillCircle(renderer, circle);
+
+	Circle* circle = new Circle(400, 300, 100);
+	circle->fillCircle(renderer, *circle);
 
 	SDL_RenderPresent(renderer);
 
 	SDL_Delay(5000);
+
+	delete circle;
 
 	return 0;
 }
