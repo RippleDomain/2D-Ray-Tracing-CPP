@@ -11,15 +11,10 @@ void Circle::fillCircle(SDL_Renderer* renderer, Circle circle)
 {
 	float r2 = circle.r * circle.r;
 
-    for (float x = circle.x - circle.r; x <= circle.x + circle.r; x++)
+    for (float y = -circle.r; y <= circle.r; y++) 
     {
-        for (float y = circle.y - circle.r; y < circle.y + circle.r; y++)
-        {
-            if ((x - circle.x) * (x - circle.x) + (y - circle.y) * (y - circle.y) <= r2)
-            {
-                SDL_RenderPoint(renderer, x, y);
-            }
-        }
+        float xSpan = sqrt(r2 - y * y);
+        SDL_RenderLine(renderer, circle.x - xSpan, circle.y + y, circle.x + xSpan, circle.y + y);
     }
 }
 

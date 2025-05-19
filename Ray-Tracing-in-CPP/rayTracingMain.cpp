@@ -17,7 +17,6 @@ int main()
 	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 
 	Circle circle = Circle(400, 540, 100);
-	Circle glowCircle = Circle(400, 540, 120);
 	Circle shadowCircle = Circle(960, 540, 140);
 	Ray ray = Ray(0, 0, 0);
 	std::vector<Ray> rays;
@@ -41,19 +40,14 @@ int main()
 			{
 				circle.setX(event.motion.x); 
 				circle.setY(event.motion.y);
-				glowCircle.setX(event.motion.x); 
-				glowCircle.setY(event.motion.y);
+
+				ray.generateRays(circle, rays);
 			}
 		}
-
-		ray.generateRays(circle, rays);
 
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 		SDL_RenderClear(renderer);
 
-		SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
-		SDL_SetRenderDrawColor(renderer, 255, 255, 0, 30);
-		circle.fillCircle(renderer, glowCircle);
 		SDL_SetRenderDrawColor(renderer, 255, 255, 0, 255);
 		circle.fillCircle(renderer, circle);
 		ray.fillRays(renderer, rays, shadowCircle);

@@ -4,7 +4,7 @@
 
 class Ray
 {
-	static const int RAY_NUMBER = 100;
+	static const int RAY_NUMBER = 150;
 
     float xStart, yStart;
     float angle;

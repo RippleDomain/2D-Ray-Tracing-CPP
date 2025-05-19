@@ -16,40 +16,42 @@ void Ray::generateRays(Circle circle, std::vector<Ray>& rays)
     for (int i = 0; i < RAY_NUMBER; i++)
     {
         double angle = ((float)i / RAY_NUMBER) * 2 * 3.14;
+
 		Ray ray = Ray(circle.getX() + circle.getR() * cos(angle), circle.getY() + circle.getR() * sin(angle), angle);
         rays.push_back(ray);
     }
 }
 
-void Ray::fillRays(SDL_Renderer* renderer, std::vector<Ray>& rays, Circle obstacle) 
+void Ray::fillRays(SDL_Renderer* renderer, std::vector<Ray>& rays, Circle obstacle)
 {
     float r2 = obstacle.getR() * obstacle.getR();
 
-    for (int i = 0; i < rays.size(); i++)
+    for (Ray& ray : rays)
     {
-		Ray ray = rays[i];
-        
-		bool hitBorder = false;
-		bool hitCircle = false;
-
         float step = 1.0f;
-		float xDraw = ray.xStart;
+
+        float xDraw = ray.xStart;
         float yDraw = ray.yStart;
 
-        while (!hitBorder && !hitCircle)
-        {
-            xDraw += step * cos(ray.angle);
-            yDraw += step * sin(ray.angle);
-            SDL_RenderPoint(renderer, xDraw, yDraw);
+        float xEnd = xDraw;
+        float yEnd = yDraw;
 
-            if (xDraw < 0 || xDraw > 1920 || yDraw < 0 || yDraw > 1080)
+        while (true)
+        {
+            xEnd += step * cos(ray.angle);
+            yEnd += step * sin(ray.angle);
+
+            if (xEnd < 0 || xEnd > 1920 || yEnd < 0 || yEnd > 1080) 
             {
-                hitBorder = true;
+                break;
             }
-            if ((xDraw - obstacle.getX()) * (xDraw - obstacle.getX()) + (yDraw - obstacle.getY()) * (yDraw - obstacle.getY()) <= r2) 
+
+            if ((xEnd - obstacle.getX()) * (xEnd - obstacle.getX()) + (yEnd - obstacle.getY()) * (yEnd - obstacle.getY()) <= r2)
             {
-				hitCircle = true;
+                break;
             }
         }
-	}
+
+        SDL_RenderLine(renderer, xDraw, yDraw, xEnd, yEnd);
+    }
 }
