@@ -9,7 +9,7 @@ Circle::Circle(int x, int y, int r)
 
 void Circle::fillCircle(SDL_Renderer* renderer, Circle circle)
 {
-    float r2 = circle.r * circle.r;
+	float r2 = circle.r * circle.r;
 
     for (float x = circle.x - circle.r; x <= circle.x + circle.r; x++)
     {

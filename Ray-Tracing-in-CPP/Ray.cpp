@@ -16,7 +16,7 @@ void Ray::generateRays(Circle circle, std::vector<Ray>& rays)
     for (int i = 0; i < RAY_NUMBER; i++)
     {
         double angle = ((float)i / RAY_NUMBER) * 2 * 3.14;
-		Ray ray = Ray(circle.getX(), circle.getY(), angle);
+		Ray ray = Ray(circle.getX() + circle.getR() * cos(angle), circle.getY() + circle.getR() * sin(angle), angle);
         rays.push_back(ray);
     }
 }
