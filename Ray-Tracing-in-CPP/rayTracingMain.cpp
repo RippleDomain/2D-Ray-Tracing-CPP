@@ -5,8 +5,8 @@
 
 int main() 
 {
-	static const int WIDTH = 800;
-	static const int HEIGHT = 600;
+	static const int WIDTH = 1920;
+	static const int HEIGHT = 1080;
 
 	SDL_Init(SDL_INIT_VIDEO);
 
@@ -16,8 +16,8 @@ int main()
 	SDL_RenderClear(renderer);
 	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 
-	Circle circle = Circle(400, 300, 100);
-	Circle shadowCircle = Circle(500, 300, 140);
+	Circle circle = Circle(400, 540, 100);
+	Circle shadowCircle = Circle(960, 540, 140);
 	Ray ray = Ray(0, 0, 0);
 	std::vector<Ray> rays;
 
@@ -51,7 +51,7 @@ int main()
 		SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 		circle.fillCircle(renderer, circle);
 		circle.fillCircle(renderer, shadowCircle);
-		ray.fillRays(renderer, rays);
+		ray.fillRays(renderer, rays, shadowCircle);
 
 		SDL_RenderPresent(renderer);
 		SDL_Delay(10);

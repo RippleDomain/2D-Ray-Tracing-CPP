@@ -21,8 +21,10 @@ void Ray::generateRays(Circle circle, std::vector<Ray>& rays)
     }
 }
 
-void Ray::fillRays(SDL_Renderer* renderer, std::vector<Ray>& rays) 
+void Ray::fillRays(SDL_Renderer* renderer, std::vector<Ray>& rays, Circle obstacle) 
 {
+    float r2 = obstacle.getR() * obstacle.getR();
+
     for (int i = 0; i < rays.size(); i++)
     {
 		Ray ray = rays[i];
@@ -40,9 +42,13 @@ void Ray::fillRays(SDL_Renderer* renderer, std::vector<Ray>& rays)
             yDraw += step * sin(ray.angle);
             SDL_RenderPoint(renderer, xDraw, yDraw);
 
-            if (xDraw < 0 || xDraw > 800 || yDraw < 0 || yDraw > 600)
+            if (xDraw < 0 || xDraw > 1920 || yDraw < 0 || yDraw > 1080)
             {
                 hitBorder = true;
+            }
+            if ((xDraw - obstacle.getX()) * (xDraw - obstacle.getX()) + (yDraw - obstacle.getY()) * (yDraw - obstacle.getY()) <= r2) 
+            {
+				hitCircle = true;
             }
         }
 	}
