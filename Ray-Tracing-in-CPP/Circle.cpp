@@ -1,40 +1,33 @@
-#include <SDL3/SDL.h>
+#include "Circle.h"
 
-class Circle
+Circle::Circle(int x, int y, int r)
 {
-	float x, y, r;
+    this->x = x;
+    this->y = y;
+    this->r = r;
+}
 
-public:
+void Circle::fillCircle(SDL_Renderer* renderer, Circle circle)
+{
+    double r2 = circle.r * circle.r;
 
-	Circle(int x, int y, int r) 
-	{
-		this->x = x;
-		this->y = y;
-		this->r = r;
-	}
+    for (double x = circle.x - circle.r; x <= circle.x + circle.r; x++)
+    {
+        for (double y = circle.y - circle.r; y < circle.y + circle.r; y++)
+        {
+            if ((x - circle.x) * (x - circle.x) + (y - circle.y) * (y - circle.y) <= r2)
+            {
+                SDL_RenderPoint(renderer, x, y);
+            }
+        }
+    }
+}
 
-	void fillCircle(SDL_Renderer* renderer, Circle circle)
-	{
-		double r2 = circle.r * circle.r;
-		
-		for (double x = circle.x - circle.r; x <= circle.x + circle.r; x++)
-		{
-			for (double y = circle.y - circle.r; y < circle.y + circle.r; y++)
-			{
-				if ((x - circle.x) * (x - circle.x) + (y - circle.y) * (y - circle.y) <= r2)
-				{
-					SDL_RenderPoint(renderer, x, y);
-				}
-			}
-		}
-	}
-
-	void setX(int x)
-	{
-		this->x = x;
-	}
-	void setY(int y)
-	{
-		this->y= y;
-	}
-};
+void Circle::setX(int x) 
+{ 
+    this->x = x; 
+}
+void Circle::setY(int y) 
+{ 
+    this->y = y; 
+}

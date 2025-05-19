@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <SDL3/SDL.h>
-#include "Circle.cpp"
+#include "Circle.h"
+#include "Ray.h"
 
 int main() 
 {
@@ -16,11 +17,16 @@ int main()
 	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 
 	Circle circle = Circle(400, 300, 100);
+	Circle shadowCircle = Circle(500, 300, 140);
+	Ray ray = Ray(0, 0, 0);
+	std::vector<Ray> rays;
+
+	ray.generateRays(circle, rays);
 
 	bool isSimRunning = true;
 	SDL_Event event;
 
-	while (isSimRunning)
+	while (isSimRunning == true)
 	{
 		while(SDL_PollEvent(&event))
 		{
@@ -37,13 +43,15 @@ int main()
 			}
 		}
 
-		//Clears the screen after each iteration so the previous circle doesn't remain on the screen.
+		ray.generateRays(circle, rays);
+
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 		SDL_RenderClear(renderer);
 
-		//Redraws the circle in its new position.
 		SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 		circle.fillCircle(renderer, circle);
+		circle.fillCircle(renderer, shadowCircle);
+		ray.fillRays(renderer, rays);
 
 		SDL_RenderPresent(renderer);
 		SDL_Delay(10);
