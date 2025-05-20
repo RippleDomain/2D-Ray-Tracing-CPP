@@ -1,10 +1,11 @@
 #include "Circle.h"
 
-Circle::Circle(int x, int y, int r)
+Circle::Circle(int x, int y, int r, Type type)
 {
     this->x = x;
     this->y = y;
     this->r = r;
+	this->type = type;
 }
 
 void Circle::fillCircle(SDL_Renderer* renderer, Circle circle)

@@ -1,12 +1,19 @@
 #pragma once
 #include <SDL3/SDL.h>
 
+enum Type 
+{
+	Reflective,
+	Absorptive
+};
+
 class Circle
 {
     float x, y, r;
+	Type type;
 
 public:
-    Circle(int x, int y, int r);
+    Circle(int x, int y, int r, Type type);
 
     void fillCircle(SDL_Renderer* renderer, Circle circle);
 
@@ -25,4 +32,8 @@ public:
     {
         return r; 
     }
+    Type getType() const 
+    {
+        return type; 
+	}
 };

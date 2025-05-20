@@ -9,9 +9,11 @@ class Ray
     float xStart, yStart;
     float angle;
 
+    void drawRay(SDL_Renderer* renderer, float x, float y, float angle, std::vector<Circle*>& obstacles, int maxReflectCount);
+
 public:
     Ray(int xStart, int yStart, float angle);
 
     void generateRays(Circle circle, std::vector<Ray>& rays);
-    void fillRays(SDL_Renderer* renderer, std::vector<Ray>& rays, Circle obstacle);
+    void fillRays(SDL_Renderer* renderer, std::vector<Ray>& rays, std::vector<Circle*>& obstacles, int maxReflectCount);
 };

@@ -1,63 +1,71 @@
 #include <stdio.h>
 #include <SDL3/SDL.h>
+#include <vector>
 #include "Circle.h"
 #include "Ray.h"
 
-int main() 
+int main()
 {
-	static const int WIDTH = 1920;
-	static const int HEIGHT = 1080;
+    static const int WIDTH = 1920;
+    static const int HEIGHT = 1080;
 
-	SDL_Init(SDL_INIT_VIDEO);
+    SDL_Init(SDL_INIT_VIDEO);
 
-	SDL_Window* window = SDL_CreateWindow("Ray Tracing", WIDTH, HEIGHT, SDL_WINDOW_RESIZABLE);
-	SDL_Renderer* renderer = SDL_CreateRenderer(window, nullptr);
-	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-	SDL_RenderClear(renderer);
-	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+    SDL_Window* window = SDL_CreateWindow("Ray Tracing", WIDTH, HEIGHT, SDL_WINDOW_RESIZABLE);
+    SDL_Renderer* renderer = SDL_CreateRenderer(window, nullptr);
 
-	Circle circle = Circle(400, 540, 100);
-	Circle shadowCircle = Circle(960, 540, 140);
-	Ray ray = Ray(0, 0, 0);
-	std::vector<Ray> rays;
+    Circle circle = Circle(400, 540, 100, Absorptive);
+    Circle shadowCircle = Circle(1600, 540, 140, Absorptive);
+    Circle reflectCircle = Circle(320, 540, 140, Reflective);
 
-	ray.generateRays(circle, rays);
+    std::vector<Ray> rays;
+    std::vector<Circle*> obstacles;
+    obstacles.push_back(&circle);
+    obstacles.push_back(&shadowCircle);
+    obstacles.push_back(&reflectCircle);
 
-	bool isSimRunning = true;
-	SDL_Event event;
+    Ray ray(0, 0, 0);
+    ray.generateRays(circle, rays);
 
-	while (isSimRunning == true)
-	{
-		while(SDL_PollEvent(&event))
-		{
-			if (event.type == SDL_EVENT_QUIT)
-			{
-				isSimRunning = false;
-			}
+    bool isSimRunning = true;
+    SDL_Event event;
 
-			//Updates the circle's position based on mouse motion events.
-			if (event.type == SDL_EVENT_MOUSE_MOTION && event.motion.state != 0)
-			{
-				circle.setX(event.motion.x); 
+    while (isSimRunning == true)
+    {
+        while (SDL_PollEvent(&event))
+        {
+            if (event.type == SDL_EVENT_QUIT)
+            {
+                isSimRunning = false;
+            }
+
+            //Updates the circle's position based on mouse motion events.
+            if (event.type == SDL_EVENT_MOUSE_MOTION && event.motion.state != 0)
+            {
+				circle.setX(event.motion.x);
 				circle.setY(event.motion.y);
 
 				ray.generateRays(circle, rays);
-			}
-		}
+            }
+        }
 
-		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-		SDL_RenderClear(renderer);
+        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+        SDL_RenderClear(renderer);
 
-		SDL_SetRenderDrawColor(renderer, 255, 255, 0, 255);
-		circle.fillCircle(renderer, circle);
-		ray.fillRays(renderer, rays, shadowCircle);
+        SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+        ray.fillRays(renderer, rays, obstacles, 3);
 
-		SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-		circle.fillCircle(renderer, shadowCircle);
+        SDL_SetRenderDrawColor(renderer, 255, 255, 0, 255);
+        circle.fillCircle(renderer, circle);
 
-		SDL_RenderPresent(renderer);
-		SDL_Delay(10);
-	}
+        SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+        reflectCircle.fillCircle(renderer, reflectCircle);
 
-	return 0;
+        SDL_SetRenderDrawColor(renderer, 128, 128, 128, 255);
+        reflectCircle.fillCircle(renderer, shadowCircle);
+
+        SDL_RenderPresent(renderer);
+    }
+
+    return 0;
 }

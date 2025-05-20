@@ -17,41 +17,84 @@ void Ray::generateRays(Circle circle, std::vector<Ray>& rays)
     {
         double angle = ((float)i / RAY_NUMBER) * 2 * 3.14;
 
-		Ray ray = Ray(circle.getX() + circle.getR() * cos(angle), circle.getY() + circle.getR() * sin(angle), angle);
+		Ray ray = Ray(circle.getX() + (circle.getR() + 1.0f) * cos(angle), circle.getY() + (circle.getR() + 1.0f) * sin(angle), angle);
         rays.push_back(ray);
     }
 }
 
-void Ray::fillRays(SDL_Renderer* renderer, std::vector<Ray>& rays, Circle obstacle)
+void Ray::fillRays(SDL_Renderer* renderer, std::vector<Ray>& rays, std::vector<Circle*>& obstacles, int maxReflectCount)
 {
-    float r2 = obstacle.getR() * obstacle.getR();
-
     for (Ray& ray : rays)
     {
-        float step = 1.0f;
+        drawRay(renderer, ray.xStart, ray.yStart, ray.angle, obstacles, maxReflectCount);
+    }
+}
 
-        float xDraw = ray.xStart;
-        float yDraw = ray.yStart;
+void Ray::drawRay(SDL_Renderer* renderer, float x, float y, float angle, std::vector<Circle*>& obstacles, int maxReflectCount)
+{
+    if (maxReflectCount <= 0)
+    {
+		return;
+    }
 
-        float xEnd = xDraw;
-        float yEnd = yDraw;
+    float step = 1.0f;
+    float maxDist = 2000.0f;
+    float traveled = 0.0f;
+    float xCurrent = x;
+    float yCurrent = y;
 
-        while (true)
+    Circle* hit = nullptr;
+
+    while (traveled < maxDist)
+    {
+        xCurrent += step * cos(angle);
+        yCurrent += step * sin(angle);
+
+        traveled += step;
+
+        if (xCurrent < 0 || xCurrent > 1920 || yCurrent < 0 || yCurrent > 1080) 
         {
-            xEnd += step * cos(ray.angle);
-            yEnd += step * sin(ray.angle);
+			break;
+        }
 
-            if (xEnd < 0 || xEnd > 1920 || yEnd < 0 || yEnd > 1080) 
-            {
-                break;
-            }
+        for (Circle* circle : obstacles)
+        {
+            float xDistance = xCurrent - circle->getX();
+            float yDistance = yCurrent - circle->getY();
 
-            if ((xEnd - obstacle.getX()) * (xEnd - obstacle.getX()) + (yEnd - obstacle.getY()) * (yEnd - obstacle.getY()) <= r2)
+            if (xDistance * xDistance + yDistance * yDistance <= circle->getR() * circle->getR())
             {
+                hit = circle;
+
                 break;
             }
         }
 
-        SDL_RenderLine(renderer, xDraw, yDraw, xEnd, yEnd);
+        if (hit)
+        {
+            break;
+        }
+    }
+
+    SDL_RenderLine(renderer, x, y, xCurrent, yCurrent);
+
+    if (hit && hit->getType() == Reflective) 
+    {
+		float xNormal = xCurrent - hit->getX();
+        float yNormal = yCurrent - hit->getY();
+        float length = sqrt(xNormal * xNormal + yNormal * yNormal);
+
+        xNormal /= length;
+        yNormal /= length;
+
+		float xIncrement = cos(angle);
+		float yIncrement = sin(angle);
+
+        float dotProduct = (cos(angle) * xNormal + sin(angle) * yNormal);
+		float xReflected = xIncrement - xNormal * dotProduct * 2;
+        float yReflected = yIncrement - yNormal * dotProduct * 2;
+        float reflectedAngle = atan2(yReflected, xReflected);
+
+		drawRay(renderer, xCurrent, yCurrent, reflectedAngle, obstacles, maxReflectCount - 1);
     }
 }
