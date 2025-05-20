@@ -6,6 +6,7 @@
 
 int main()
 {
+	//Initialize the window and renderer.
     static const int WIDTH = 1920;
     static const int HEIGHT = 1080;
 
@@ -14,16 +15,18 @@ int main()
     SDL_Window* window = SDL_CreateWindow("Ray Tracing", WIDTH, HEIGHT, SDL_WINDOW_RESIZABLE);
     SDL_Renderer* renderer = SDL_CreateRenderer(window, nullptr);
 
+	//Initialize the circles and adds them into a vector.
     Circle circle = Circle(400, 540, 100, Absorptive);
     Circle shadowCircle = Circle(1600, 540, 140, Absorptive);
     Circle reflectCircle = Circle(320, 540, 140, Reflective);
 
-    std::vector<Ray> rays;
     std::vector<Circle*> obstacles;
     obstacles.push_back(&circle);
     obstacles.push_back(&shadowCircle);
     obstacles.push_back(&reflectCircle);
 
+	//Initialize the rays.
+    std::vector<Ray> rays;
     Ray ray(0, 0, 0);
     ray.generateRays(circle, rays);
 
@@ -49,9 +52,11 @@ int main()
             }
         }
 
+        //Clear the screen.
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
         SDL_RenderClear(renderer);
 
+		//Renders the rays and circles.
         SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
         ray.fillRays(renderer, rays, obstacles, 3);
 
