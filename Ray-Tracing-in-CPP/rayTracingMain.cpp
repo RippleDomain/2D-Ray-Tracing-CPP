@@ -16,7 +16,7 @@ int main()
     SDL_Renderer* renderer = SDL_CreateRenderer(window, nullptr);
 
 	//Initialize the circles and adds them into a vector.
-    Circle circle = Circle(400, 540, 100, Absorptive);
+    Circle circle = Circle(960, 540, 100, Absorptive);
     Circle shadowCircle = Circle(1600, 540, 140, Absorptive);
     Circle reflectCircle = Circle(320, 540, 140, Reflective);
 
