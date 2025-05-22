@@ -16,13 +16,9 @@ Cast hundreds of rays from a movable “emissive” light-source circle, and wat
 
 ---
 
-## Showcases
+## Preview
 
-- One Absorbtive and One Reflective Circle
-
-- Two Reflective Circles
-
-- Two Absorptive Circles
+![1ofeach](https://github.com/user-attachments/assets/13d93e54-6bdc-4c3f-a358-7beb370c2f64)
 
 ---
 
