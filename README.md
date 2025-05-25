@@ -25,7 +25,7 @@ Cast hundreds of rays from a movable “emissive” light-source circle, and wat
 ## How to Run
 
 - There is a release that you can download and run in the Releases section. Simply download **2D-Ray-Tracing-CPP.zip**, extract it, and run the **Ray-Tracing-in-CPP.exe** file.
-- It is necessary that you the .exe file and SDL3.dll file to be in the same directory for the executable to run.
+- It is necessary that you the Ray-Tracing-in-CPP.exe file and SDL3.dll file to be in the same directory for the executable to run.
 
 ---
 
