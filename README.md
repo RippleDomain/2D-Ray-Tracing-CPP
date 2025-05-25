@@ -22,6 +22,13 @@ Cast hundreds of rays from a movable “emissive” light-source circle, and wat
 
 ---
 
+## How to Run
+
+- There is a release that you can download and run in the Releases section. Simply download **2D-Ray-Tracing-CPP.zip**, extract it, and run the **Ray-Tracing-in-CPP.exe** file.
+- It is necessary that you the .exe file and SDL3.dll file to be in the same directory for the executable to run.
+
+---
+
 ## Source for the Formula Used In Reflection
 
 - https://www.gamedeveloper.com/programming/pool-hall-lessons-fast-accurate-collision-detection-between-circles-or-spheres
