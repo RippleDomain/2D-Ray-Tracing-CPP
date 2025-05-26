@@ -18,6 +18,9 @@ Cast hundreds of rays from a movable “emissive” light-source circle, and wat
 
 ## Preview
 
+- **Yellow (Emissive) Orb**: Emits light rays.
+- **White (Reflective) Orb**: Accurately reflects the light rays coming from the light source.
+- **Gray (Absorptive) Orb**: Absorbs incoming light rays and only produces shadow behind itself.
 ![1ofeach](https://github.com/user-attachments/assets/13d93e54-6bdc-4c3f-a358-7beb370c2f64)
 
 ---
